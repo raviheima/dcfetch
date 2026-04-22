@@ -41,6 +41,8 @@ static PFNPWNODESTATEASSTRING pw_node_state_as_string_ptr = NULL;
 
 static time_t prev_time = 0;
 
+static const char *pw_libs[] = { "libpipewire-0.3.so", "libpipewire-0.3.so.0"};
+
 extern struct dicts config;
 extern struct dicts os_details;
 
@@ -186,11 +188,20 @@ void idle_loop(void *data) {
 	}
 }
 
+void *get_pw_handle(void) {
+	for (size_t i = 0; i < sizeof(pw_libs) / sizeof(pw_libs[0]); i++) {
+       		void *pw_handle = dlopen(pw_libs[i], RTLD_LAZY);
+		
+		if (pw_handle != NULL)
+			return pw_handle;
+	}
+
+	return NULL;
+}
+
 bool find_pw_symbols(void) {
-	void *pw_handle = dlopen("libpipewire-0.3.so", RTLD_LAZY);
-
-	 time(NULL);
-
+	void *pw_handle = get_pw_handle();
+	
 	if (pw_handle == NULL)
 		return false;
 
