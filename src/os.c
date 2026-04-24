@@ -106,11 +106,16 @@ struct dicts get_os_details(void) {
 			if (desktop != NULL)
 				add_dict_entry(&os_details, "DESKTOP", desktop);
 		} else if (strcmp(os_detail, "TERM") == 0) {
-			char *term = getenv("TERM");
+			char *term_program = getenv("TERM_PROGRAM");
 
-			if (term != NULL)
-				add_dict_entry(&os_details, "TERM", term);
+			if (term_program != NULL) {
+				add_dict_entry(&os_details, "TERM", term_program);
+			} else {
+				char *term = getenv("TERM");
 
+				if (term != NULL)
+					add_dict_entry(&os_details, "TERM", term);
+			}
 		} else if (strcmp(os_detail, "SHELL") == 0) {
 			char *shell = getenv("SHELL");
 
