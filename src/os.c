@@ -95,44 +95,46 @@ struct dicts get_os_details(void) {
 
 	if (os_details_conf == NULL)
 		return os_details;
+	
+	char *os_detail = strtok(os_details_conf, " ");
 
-	if (strstr(os_details_conf, "DESKTOP") != NULL ) {
-		char *desktop = getenv("XDG_CURRENT_DESKTOP");
-		
-		if (desktop != NULL)
-			add_dict_entry(&os_details, "DESKTOP", desktop);
-	}
+	while (os_detail != NULL) {
 
-	if (strstr(os_details_conf, "TERM") != NULL) {
-		char *term = getenv("TERM");
+		if (strcmp(os_detail, "DESKTOP") == 0) {
+			char *desktop = getenv("XDG_CURRENT_DESKTOP");
+			
+			if (desktop != NULL)
+				add_dict_entry(&os_details, "DESKTOP", desktop);
+		} else if (strcmp(os_detail, "TERM") == 0) {
+			char *term = getenv("TERM");
 
-		if (term != NULL)
-			add_dict_entry(&os_details, "TERM", term);
-	}
+			if (term != NULL)
+				add_dict_entry(&os_details, "TERM", term);
 
-	if (strstr(os_details_conf, "SHELL") != NULL) {
-		char *shell = getenv("SHELL");
+		} else if (strcmp(os_detail, "SHELL") == 0) {
+			char *shell = getenv("SHELL");
 
-		if (shell != NULL) {
+			if (shell != NULL) {
 
-			int strip_index = -1;
+				int strip_index = -1;
 
-			for (int i = 0; i < strlen(shell); i++) {
-				if (shell[i] == '/')
-					strip_index = i + 1;
+				for (int i = 0; i < strlen(shell); i++) {
+					if (shell[i] == '/')
+						strip_index = i + 1;
+				}
+
+				if (strip_index != -1)
+					shell += strip_index;
+				
+				add_dict_entry(&os_details, "SHELL", shell);
 			}
 
-			if (strip_index != -1)
-				shell += strip_index;
-			
-			add_dict_entry(&os_details, "SHELL", shell);
+		} else if (strcmp(os_detail, "KERN") == 0) {
+			add_dict_entry(&os_details, "KERN", "%s %s", utsname_data.sysname, utsname_data.release);
 		}
-	}
 
-	if (strstr(os_details_conf, "KERN") != NULL) {
-		add_dict_entry(&os_details, "KERN", "%s %s", utsname_data.sysname, utsname_data.release);
+		os_detail = strtok(NULL, " ");
 	}
-
 
 	return os_details;
 }
