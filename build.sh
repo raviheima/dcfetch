@@ -12,7 +12,8 @@ if [ "$TARGET" = "" ]; then
 	if [ $OS = "Linux" ]; then
 		SRC="$SRC src/audio/linux.c"
 	elif [ $OS = "Darwin" ]; then
-		SRC="$SRC src/audio/macos.c"
+		STDFLAGS="$STDFLAGS -framework Foundation -F /System/Library/PrivateFrameworks -weak_framework MediaRemote"
+		SRC="$SRC src/audio/macos.m"
 	else
 		SRC="$SRC src/audio/unsupported.c"
 	fi

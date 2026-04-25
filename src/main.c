@@ -30,7 +30,7 @@ int main (int argc, char *argv[]) {
 	
 	if (get_dict_bool("DISPLAY_MEDIA", &config)) {
 		if (!init_audio(argc, argv))
-			puts("Failed to init audio");
+			printf("Failed to init audio!\n");
 	}
 	
 	set_os_activity();

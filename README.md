@@ -11,7 +11,7 @@
 
 - only build-time dependency is a C compiler
 - works on both Linux and macOS
-- can be configured to show the currently playing media (only on Linux for now)
+- can be configured to show the currently playing media
 
 ## Configuration
 
