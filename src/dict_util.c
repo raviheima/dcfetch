@@ -29,6 +29,18 @@ char *get_dict_value(const char *key, struct dicts *d) {
 	return NULL;	
 }
 
+struct dict *get_dict_entry(const char *key, struct dicts *d) {
+	for (int i = 0; i < d->count; i++) {
+		struct dict dict = d->dicts[i];
+
+		if (strcmp(dict.key, key) == 0 && strcmp(dict.value, "") != 0) {
+			return &d->dicts[i];
+		}
+	}
+
+	return NULL;
+}
+
 bool get_dict_bool(const char *key, struct dicts *d) {
 	char *value = get_dict_value(key, d);
 	return value != NULL && atoi(value);

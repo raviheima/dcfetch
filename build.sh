@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SRC="src/main.c src/dict_util.c src/os.c src/rpc.c"
+SRC="src/main.c src/dict_util.c src/data/os.c src/data/cpu.c src/rpc.c"
 STDFLAGS="-Iinclude -Wall"
 OUTPUT="dcfetch"
 

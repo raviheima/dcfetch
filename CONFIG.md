@@ -13,7 +13,7 @@
 
 - OS_DETAILS
   - what to display below the OS name
-  - values -> `DESKTOP SHELL TERM KERN`
+  - values -> `DESKTOP SHELL TERM KERN CPU_USAGE`
 
 - CUSTOM_DESC
   - changes this if you want a custom description instead of the OS details

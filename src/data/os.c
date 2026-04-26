@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
@@ -11,6 +12,15 @@
 extern struct dicts config;
 extern struct dicts os_details;
 
+int get_cpu_usage(void);
+
+static void update_dynamic_values(void) {
+	struct dict *cpu_usage = get_dict_entry("CPU_USAGE", &os_details);
+	
+	if (cpu_usage != NULL)
+		snprintf(cpu_usage->value, sizeof(cpu_usage->value), "%d%%", get_cpu_usage());
+}
+
 void set_os_activity(void) {
 	char *os_name = get_dict_value("OS_NAME", &os_details);
 	char *image = get_dict_value("OS_IMAGE", &os_details);
@@ -18,7 +28,9 @@ void set_os_activity(void) {
 
 	char *separator = !separator_conf ? " | " : separator_conf;
 
-	char state[1024] = "";	
+	char state[1024] = "";
+
+	update_dynamic_values();
 
 	for (int i = 2; i < os_details.count; i++) {
 		if (i != 2)
@@ -99,7 +111,6 @@ struct dicts get_os_details(void) {
 	char *os_detail = strtok(os_details_conf, " ");
 
 	while (os_detail != NULL) {
-
 		if (strcmp(os_detail, "DESKTOP") == 0) {
 			char *desktop = getenv("XDG_CURRENT_DESKTOP");
 			
@@ -136,6 +147,8 @@ struct dicts get_os_details(void) {
 
 		} else if (strcmp(os_detail, "KERN") == 0) {
 			add_dict_entry(&os_details, "KERN", "%s %s", utsname_data.sysname, utsname_data.release);
+		} else if (strcmp(os_detail, "CPU_USAGE") == 0) {
+			add_dict_entry(&os_details, "CPU_USAGE", "%d%%", get_cpu_usage());
 		}
 
 		os_detail = strtok(NULL, " ");

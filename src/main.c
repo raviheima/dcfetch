@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <signal.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include <os.h>
 #include <rpc.h>
+#include <data.h>
 #include <audio.h>
 #include <dict.h>
 #include <dict_util.h>
@@ -33,9 +34,10 @@ int main (int argc, char *argv[]) {
 			printf("Failed to init audio!\n");
 	}
 	
-	set_os_activity();
-
-	for(;;) {}
+	for(;;) {
+		set_os_activity();
+		sleep(5);
+	}
 	
 	return 0;
 }
